@@ -1,0 +1,9 @@
+.header {
+    .app-logo-row {
+        @apply p-4;
+
+        &__logo {
+            @apply font-extrabold text-center text-lg;
+        }
+    }
+}
