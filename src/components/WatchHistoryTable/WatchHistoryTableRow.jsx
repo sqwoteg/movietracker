@@ -30,7 +30,7 @@ const WatchHistoryTableRow = ({
             <td>{title}</td>
             <td>{type}</td>
             <td>{genres.map((g) => (
-                                <div class="badge mr-1">{g}</div>
+                                <div key={g} class="badge mr-1">{g}</div>
                             ))}</td>
             <td>{year}</td>
             <td>
