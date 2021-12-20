@@ -11,6 +11,9 @@
         }
     }
     .react-simple-star-rating {
+        .filled-icons {
+            transition: width .3s ease-in-out;
+        }
         svg {
             @apply inline-block w-6;
         }
