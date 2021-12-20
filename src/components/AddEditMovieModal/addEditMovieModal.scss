@@ -1,0 +1,10 @@
+.modal-wrapper {
+    @apply fixed left-0 right-0 top-0 bottom-0 flex justify-center items-center;
+
+    .modal-out {
+        @apply absolute left-0 right-0 top-0 bottom-0 opacity-50 bg-black;
+    }
+    .modal-box {
+        @apply z-10;
+    }
+}

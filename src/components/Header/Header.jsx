@@ -6,9 +6,17 @@ const Header = () => {
     return (
         <header className={"header"}>
             <div className="max-width-container">
-                <div className="app-logo-row">
+                <div className="row">
                     <Link to="/">
-                        <div className="app-logo-row__logo">movietracker</div>
+                        <div className="logo">movietracker</div>
+                    </Link>
+                </div>
+                <div className="row">
+                    <Link className="btn btn-xs btn-link" to="/watched">
+                        watched
+                    </Link>
+                    <Link className="btn btn-xs btn-link" to="/waitlist">
+                        waitlist
                     </Link>
                 </div>
             </div>

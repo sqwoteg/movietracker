@@ -1,3 +1,10 @@
-.create-product-page {
-    @apply min-h-full flex justify-center items-center;
+.page {
+    &--watch-history {
+        .table-wrapper {
+            @apply rounded bg-white rounded-3xl overflow-hidden;
+        }
+        .controls-wrapper {
+            @apply mb-4 px-4;
+        }
+    }
 }

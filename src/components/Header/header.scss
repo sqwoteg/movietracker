@@ -1,8 +1,8 @@
 .header {
-    .app-logo-row {
-        @apply p-4;
+    .row {
+        @apply p-4 flex flex-row justify-center items-center;
 
-        &__logo {
+        .logo {
             @apply font-extrabold text-center text-lg;
         }
     }

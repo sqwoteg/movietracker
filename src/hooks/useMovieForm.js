@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const useForm = (callback) => {
+const useForm = (callback, err) => {
     const [values, setValues] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -47,7 +47,7 @@ const useForm = (callback) => {
         ) {
             callback();
         } else {
-            alert("There is an Error!");
+            err(errors);
             console.log(errors)
         }
     };

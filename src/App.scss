@@ -5,3 +5,20 @@
 html, body, #root {
   @apply bg-appBackground min-h-screen;
 }
+
+.screen-width-limiter {
+  @apply max-w-screen-lg m-auto;
+}
+
+.page {
+  @apply p-4;
+}
+
+.modal-form {
+  &__title {
+    @apply text-2xl font-bold text-center;
+  }
+  &__subtitle {
+    @apply text-lg text-center mb-8;
+  }
+}
