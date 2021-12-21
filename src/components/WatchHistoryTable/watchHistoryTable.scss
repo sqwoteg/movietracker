@@ -1,4 +1,7 @@
 .table {
+    thead {
+        @apply select-none;
+    }
     th:first-child {
         @apply pl-8 w-1 whitespace-nowrap align-middle;
     }
