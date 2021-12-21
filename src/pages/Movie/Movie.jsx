@@ -30,7 +30,7 @@ const MoviePage = () => {
     return (
         <div className="page page--movie">
             <div className="screen-width-limiter grid grid-cols-4 gap-6">
-                <div className="card bg-base-100">
+                <div className="poster">
                     <figure>
                         <img src={posterURL} />
                     </figure>
