@@ -28,6 +28,11 @@ const WatchHistoryPage = () => {
         }
     };
 
+    const deleteSelectedMovies = () => {
+        dispatch(removeMovies({ ids: selectedMovies }));
+        setSelectedMovies([]);
+    }
+
     return (
         <div className="page page--watch-history">
             <div className="screen-width-limiter">
@@ -49,9 +54,7 @@ const WatchHistoryPage = () => {
                         </button> */}
                         <button
                             disabled={selectedMovies.length > 0 ? false : true}
-                            onClick={() =>
-                                dispatch(removeMovies({ ids: selectedMovies }))
-                            }
+                            onClick={deleteSelectedMovies}
                             className="btn btn-xs modal-button"
                         >
                             Delete
