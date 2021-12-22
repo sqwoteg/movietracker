@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const TextInputComponent = ({
     label,
@@ -8,8 +8,15 @@ const TextInputComponent = ({
     multiline,
     defaultValue,
     type,
-    name
+    name,
 }) => {
+    const [event, setEvent] = useState(null);
+
+    useEffect(() => {
+        const timeOutId = setTimeout(() => onChange(event), 500);
+        return () => clearTimeout(timeOutId);
+    }, [event]);
+
     return (
         <div className="form-control">
             <label className="label">
@@ -20,7 +27,7 @@ const TextInputComponent = ({
                     className="textarea h-24 textarea-bordered"
                     placeholder={placeholder}
                     defaultValue={defaultValue}
-                    onChange={onChange}
+                    onChange={(e) => setEvent(e)}
                     name={name}
                 ></textarea>
             ) : (
@@ -29,7 +36,8 @@ const TextInputComponent = ({
                     placeholder={placeholder}
                     className="input input-bordered"
                     defaultValue={defaultValue}
-                    onChange={onChange}
+                    onChange={(e) => setEvent(e)}
+                    onLoad={onChange}
                     name={name}
                 />
             )}
@@ -39,7 +47,7 @@ const TextInputComponent = ({
 
 TextInputComponent.defaultProps = {
     multiline: false,
-    type: "text"
+    type: "text",
 };
 
 export default TextInputComponent;
