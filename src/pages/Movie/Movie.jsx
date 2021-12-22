@@ -23,7 +23,6 @@ const MoviePage = () => {
             )
             .then((r) => {
                 setPosterURL(r.data.Poster);
-                console.log(r);
             });
     }, [movie]);
 

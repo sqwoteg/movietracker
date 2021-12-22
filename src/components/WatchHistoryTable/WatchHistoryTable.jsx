@@ -53,6 +53,7 @@ const WatchHistoryTable = ({ movies, onMovieCheckboxChange }) => {
             <tbody>
                 {[]
                     .concat(movies)
+                    .filter((movie) => movie.watched === true)
                     .sort((a, b) => {
                         let result = 0;
                         if (typeof a[sortBy] === "string") {

@@ -41,11 +41,14 @@ const AddEditMovieModal = ({ movieID, close }) => {
     const dispatch = useDispatch();
 
     const submit = () => {
+        console.log(values);
         let newValues = {
             ...movie,
-            ...values
+            ...values,
         };
-        newValues.genres = Array.isArray(newValues.genres) ? newValues.genres : newValues.genres.split(", ");
+        newValues.genres = Array.isArray(newValues.genres)
+            ? newValues.genres
+            : newValues.genres.split(", ");
 
         if (movie) {
             // editing
@@ -58,9 +61,12 @@ const AddEditMovieModal = ({ movieID, close }) => {
     };
 
     const err = (errors) => {
-        if (Object.keys(errors).length === 0) toast.error("You didn't change any values");
-        else toast.error(errors);
-    }
+        if (Object.keys(errors).length === 0)
+            toast.error("You didn't change any values");
+        else {
+            for (let err of Object.values(errors)) toast.error(err)
+        }
+    };
 
     const { handleChange, values, errors, handleSubmit } = useForm(submit, err);
 
@@ -139,6 +145,18 @@ const AddEditMovieModal = ({ movieID, close }) => {
                             onChange={handleChange}
                             name="comments"
                         />
+                        <div className="checkbox-row">
+                            <label className="cursor-pointer label">
+                                <input
+                                    name="watched"
+                                    type="checkbox"
+                                    className="checkbox opacity-60"
+                                    defaultChecked={true}
+                                    onChange={handleChange}
+                                />
+                                <span className="label-text">I have already watched this film</span>
+                            </label>
+                        </div>
                     </div>
                     <div className="modal-action">
                         <button className="btn btn-ghost" onClick={close}>

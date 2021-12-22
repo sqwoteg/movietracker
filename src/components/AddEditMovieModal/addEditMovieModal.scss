@@ -7,4 +7,18 @@
     .modal-box {
         @apply z-10;
     }
+    .checkbox-row {
+        @apply form-control mt-4;
+
+        .label {
+
+            &:last-child {
+                @apply justify-start p-0;
+
+                .label-text {
+                    @apply pl-2;
+                }
+            }
+        }
+    }
 }

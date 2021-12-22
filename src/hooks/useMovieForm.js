@@ -12,7 +12,7 @@ const useForm = (callback, err) => {
                 if ((value > 2100 || value < 1800)) {
                     setErrors({
                         ...errors,
-                        year: "Year should be in (1800; 2100)",
+                        year: "Year should be between 1800 and 2100",
                     });
                 } else {
                     const { year, ...newObj } = errors;
@@ -27,8 +27,11 @@ const useForm = (callback, err) => {
     const handleChange = (event) => {
         event.persist();
 
+        console.log(event);
         let name = event.target.name;
-        let val = event.target.value;
+        let val;
+        if (event.target.type === "checkbox") val = event.target.checked;
+        else val = event.target.value;
 
         validate(event, name, val);
 

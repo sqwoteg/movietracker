@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, findNonSerializableValue } from "@reduxjs/toolkit";
 
 export const loadMovies = createAsyncThunk("movies/loadMovies", async () => {
     try {
@@ -66,7 +66,7 @@ const moviesSlice = createSlice({
 });
 
 export const selectMovies = (state) => state.movies.list;
-export const selectMovie = id => state => {console.log(id, state.movies); return state.movies.list.filter((movie) => movie.id === id)[0]};
+export const selectMovie = id => state => state.movies.list.filter((movie) => movie.id === id)[0];
 export const selectMoviesCount = (state) => state.movies.count;
 
 export default moviesSlice.reducer;
