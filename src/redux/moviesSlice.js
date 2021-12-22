@@ -1,10 +1,13 @@
 import { createAsyncThunk, createSlice, findNonSerializableValue } from "@reduxjs/toolkit";
 
+let lastID = -1;
+
 export const loadMovies = createAsyncThunk("movies/loadMovies", async () => {
     try {
         const movies = localStorage.getItem("movies");
-        if (movies === null) return [];
-        return JSON.parse(movies);
+        const lastID = localStorage.getItem("lastid");
+        if (movies === null || lastID === null) return {movies: {}, lastID: -1};
+        return {movies: JSON.parse(movies), lastID: +lastID};
     } catch (error) {
         console.log(error);
         return [];
@@ -14,6 +17,7 @@ export const loadMovies = createAsyncThunk("movies/loadMovies", async () => {
 export const saveMovies = createAsyncThunk("movies/saveMovies", async (movies) => {
     try {
         localStorage.setItem("movies", JSON.stringify(movies));
+        localStorage.setItem("lastid", lastID);
     } catch (error) {
         console.log(error);
     }
@@ -38,35 +42,33 @@ export const editMovie = createAsyncThunk("movies/editMovie", async (payload) =>
 const moviesSlice = createSlice({
     name: "movies",
     initialState: {
-        list: [],
-        lastID: 0,
+        list: {},
     },
     extraReducers: {
         [loadMovies.fulfilled]: (state, action) => {
-            state.list = action.payload;
-            state.lastID = action.payload[action.payload.length - 1].id;
+            state.list = action.payload.movies;
+            lastID = action.payload.lastID;
         },
         [addMovie.fulfilled]: (state, action) => {
-            state.list.push({ ...action.payload, id: state.lastID + 1});
-            state.lastID += 1;
+            state.list[lastID + 1] = { ...action.payload, id: lastID + 1 };
+            lastID += 1;
         },
         [removeMovies.fulfilled]: (state, action) => {
-            state.list = state.list.filter((movie) => !action.payload.includes(movie.id));
+            for (let id of action.payload)
+                delete state.list[id];
         },
         [setMovieMark.fulfilled]: (state, action) => {
-            const movieIndex = state.list.findIndex((movie => movie.id == action.payload.id));
-            state.list[movieIndex].mark = action.payload.mark;
+            state.list[action.payload.id].mark = action.payload.mark;
         },
         [editMovie.fulfilled]: (state, action) => {
-            const movieIndex = state.list.findIndex((movie => movie.id == action.payload.id));
             let newMovie = {...action.payload.movie, id: action.payload.id};
-            state.list[movieIndex] = newMovie;
+            state.list[action.payload.id] = newMovie;
         },
     },
 });
 
-export const selectMovies = (state) => state.movies.list;
-export const selectMovie = id => state => state.movies.list.filter((movie) => movie.id === id)[0];
+export const selectMovies = (state) => Object.values(state.movies.list);
+export const selectMovie = id => state => state.movies.list[id];
 export const selectMoviesCount = (state) => state.movies.count;
 
 export default moviesSlice.reducer;
