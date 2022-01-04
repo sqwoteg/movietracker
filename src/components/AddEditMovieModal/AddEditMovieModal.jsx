@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { addMovie, editMovie, selectMovie } from "../../redux/moviesSlice";
-import useForm from "../../hooks/useMovieForm";
+import useForm from "../../hooks/useForm";
 import TextInputComponent from "../TextInputComponent/TextInputComponent";
 import "./addEditMovieModal.scss";
 import { toast } from "react-toastify";
@@ -31,6 +31,18 @@ const AddEditMovieModal = ({ movieID, close }) => {
     };
 
     const movie = useSelector(selectMovie(movieID));
+    const movieValues = Object.assign(
+        {
+            title: "",
+            genres: "",
+            year: "",
+            comments: "",
+            watched: true,
+        },
+        movie
+    );
+    if (Array.isArray(movieValues.genres))
+        movieValues.genres = movieValues.genres.join(", ");
 
     useEffect(() => {
         if (movieID && !movie) {
@@ -41,34 +53,48 @@ const AddEditMovieModal = ({ movieID, close }) => {
     const dispatch = useDispatch();
 
     const submit = () => {
-        console.log(values);
-        let newValues = {
-            ...movie,
-            ...values,
-        };
-        newValues.genres = Array.isArray(newValues.genres)
-            ? newValues.genres
-            : newValues.genres.split(", ");
+        let values = Object.assign({}, data);
+        values.genres = values.genres.split(", ");
 
         if (movie) {
             // editing
-            dispatch(editMovie({ id: movieID, movie: newValues }));
+            dispatch(editMovie({ id: movieID, movie: values }));
         } else {
             // creating new
-            dispatch(addMovie(newValues));
+            dispatch(addMovie(values));
         }
         close();
     };
 
-    const err = (errors) => {
-        if (Object.keys(errors).length === 0)
-            toast.error("You didn't change any values");
-        else {
-            for (let err of Object.values(errors)) toast.error(err)
-        }
-    };
-
-    const { handleChange, values, errors, handleSubmit } = useForm(submit, err);
+    const { handleSubmit, handleChange, data } = useForm({
+        initialValues: movieValues,
+        validations: {
+            title: {
+                required: {
+                    value: true,
+                    message: "This field is required",
+                },
+            },
+            genres: {
+                required: {
+                    value: true,
+                    message: "This field is required",
+                },
+            },
+            year: {
+                pattern: {
+                    value: "^$|^(18|19|20)\\d{2}$",
+                    message: "Enter a valid year",
+                },
+            },
+        },
+        onSubmit: submit,
+        onErrors: (errs) => {
+            for (let err of Object.entries(errs))
+                toast.error(`${err[0]}: ${err[1]}`);
+            console.log("errors:", errs);
+        },
+    });
 
     return (
         <Fragment>
@@ -112,7 +138,7 @@ const AddEditMovieModal = ({ movieID, close }) => {
                             defaultValue={
                                 movie && movie.title ? movie.title : ""
                             }
-                            onChange={handleChange}
+                            onChange={handleChange("title")}
                             name="title"
                         />
                         <TextInputComponent
@@ -123,7 +149,7 @@ const AddEditMovieModal = ({ movieID, close }) => {
                                     ? movie.genres.join(", ")
                                     : ""
                             }
-                            onChange={handleChange}
+                            onChange={handleChange("genres")}
                             name="genres"
                         />
                         <TextInputComponent
@@ -131,7 +157,7 @@ const AddEditMovieModal = ({ movieID, close }) => {
                             placeholder="1984"
                             defaultValue={movie && movie.year ? movie.year : ""}
                             type="number"
-                            onChange={handleChange}
+                            onChange={handleChange("year")}
                             name="year"
                         />
                         <TextInputComponent
@@ -142,7 +168,7 @@ const AddEditMovieModal = ({ movieID, close }) => {
                                 movie && movie.comments ? movie.comments : ""
                             }
                             type="number"
-                            onChange={handleChange}
+                            onChange={handleChange("comments")}
                             name="comments"
                         />
                         <div className="checkbox-row">
@@ -152,9 +178,11 @@ const AddEditMovieModal = ({ movieID, close }) => {
                                     type="checkbox"
                                     className="checkbox opacity-60"
                                     defaultChecked={true}
-                                    onChange={handleChange}
+                                    onChange={handleChange("watched")}
                                 />
-                                <span className="label-text">I have already watched this film</span>
+                                <span className="label-text">
+                                    I have already watched this film
+                                </span>
                             </label>
                         </div>
                     </div>

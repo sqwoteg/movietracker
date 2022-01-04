@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { loadMovies } from "./redux/moviesSlice";
+import WaitListPage from "./pages/WaitList/WaitListPage";
 
 function App() {
     const dispatch = useDispatch();
@@ -24,7 +25,10 @@ function App() {
                         <Route index element={<WatchHistoryPage />} />
                         <Route path=":id" element={<MoviePage />} />
                     </Route>
-                    <Route path="waitlist" element={<Fragment />} />
+                    <Route path="waitlist">
+                        <Route index element={<WaitListPage />} />
+                        <Route path=":id" element={<MoviePage />} />
+                    </Route>
                 </Route>
             </Routes>
             <ToastContainer />

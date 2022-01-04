@@ -1,5 +1,12 @@
 .page {
     &--movie {
+        .poster-skeleton {
+            @apply h-full block;
+            
+            &:after {
+                @apply top-0;
+            }
+        }
         .poster {
             @apply card bg-base-100 aspect-[2/3];
             

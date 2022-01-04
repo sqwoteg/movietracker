@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectMovie, setMovieMark } from "../../redux/moviesSlice";
 import { Rating } from "react-simple-star-rating";
 import axios from "axios";
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import "./movie.scss";
 
 const MoviePage = () => {
@@ -12,6 +14,7 @@ const MoviePage = () => {
     const dispatch = useDispatch();
 
     const [posterURL, setPosterURL] = useState(null);
+    const [posterLoaded, setPosterLoaded] = useState(false);
 
     useEffect(() => {
         if (!movie) return;
@@ -22,7 +25,11 @@ const MoviePage = () => {
                 )}&apikey=365e8c1a`
             )
             .then((r) => {
-                setPosterURL(r.data.Poster);
+                if (r.data.Poster) setPosterURL(r.data.Poster);
+                else setPosterLoaded(null);
+            })
+            .catch(() => {
+                setPosterLoaded(null);
             });
     }, [movie]);
 
@@ -31,7 +38,8 @@ const MoviePage = () => {
             <div className="screen-width-limiter grid grid-cols-4 gap-6">
                 <div className="poster">
                     <figure>
-                        <img src={posterURL} />
+                        {!posterLoaded && <Skeleton className="poster-skeleton" enableAnimation={posterLoaded !== null} />}
+                        <img src={posterURL} onLoad={() => setPosterLoaded(true)} onError={() => setPosterLoaded(null)} />
                     </figure>
                 </div>
                 {movie && (

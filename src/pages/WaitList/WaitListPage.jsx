@@ -8,11 +8,11 @@ import {
     selectMovie,
     removeMovies,
 } from "../../redux/moviesSlice";
-import WatchHistoryTable from "../../components/WatchHistoryTable";
-import AddEditMovieModal from "../../components/AddEditMovieModal";
-import "./watchHistoryPage.scss";
+import WatchHistoryTable from "../../components/WatchHistoryTable/WatchHistoryTable";
+import AddEditMovieModal from "../../components/AddEditMovieModal/AddEditMovieModal";
+import "./WaitListPage.scss";
 
-const WatchHistoryPage = () => {
+const WaitListPage = () => {
     const movies = useSelector(selectMovies);
     const dispatch = useDispatch();
 
@@ -31,7 +31,7 @@ const WatchHistoryPage = () => {
     const deleteSelectedMovies = () => {
         dispatch(removeMovies({ ids: selectedMovies }));
         setSelectedMovies([]);
-    }
+    };
 
     return (
         <div className="page page--watch-history">
@@ -63,7 +63,7 @@ const WatchHistoryPage = () => {
                             disabled={
                                 selectedMovies.length === 1 ? false : true
                             }
-                            onClick={() => {console.log(selectedMovies); setMovieEdit(selectedMovies[0])}}
+                            onClick={() => setMovieEdit(selectedMovies[0])}
                             className="btn btn-xs modal-button"
                         >
                             Edit
@@ -110,7 +110,7 @@ const WatchHistoryPage = () => {
                 <div className="table-wrapper">
                     <WatchHistoryTable
                         movies={movies.filter(
-                            (movie) => movie.watched === true
+                            (movie) => movie.watched === false
                         )}
                         onMovieCheckboxChange={onMovieCheckboxChange}
                     />
@@ -134,4 +134,4 @@ const WatchHistoryPage = () => {
     );
 };
 
-export default WatchHistoryPage;
+export default WaitListPage;
