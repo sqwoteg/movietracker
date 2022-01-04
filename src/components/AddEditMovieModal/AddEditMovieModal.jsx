@@ -92,7 +92,6 @@ const AddEditMovieModal = ({ movieID, close }) => {
         onErrors: (errs) => {
             for (let err of Object.entries(errs))
                 toast.error(`${err[0]}: ${err[1]}`);
-            console.log("errors:", errs);
         },
     });
 
